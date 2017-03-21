@@ -11,8 +11,8 @@ def Tic_Tac_Toe():
     board_size = 0
     p1 = ""
     p2 = ""
-    board = [[0 for x in range(board_size)] for y in range(board_size)]                    #Game board spaces
-   
+
+    
 
     def get_board_size():
         print("What size board do you wish to play on: ")
@@ -25,56 +25,98 @@ def Tic_Tac_Toe():
     
 
     def create_board(board_size):
-        maxSize = board_size * board_size
         count = 0
-        print("board_size is:", board_size)
         for i in range(0,board_size):
             for j in range(0,board_size):
                 board[i][j] = count
                 count += 1
+                
         
          
     def print_board():                                                  #prints the board
         #maxSize = board_size * board_size
-
-         for i in range(0,board_size):
+        count = 0
+        for i in range(0,board_size):
             for j in range(0,board_size):
-                if i % board_size == 0 and i != 0:
+                if count % board_size == 0 and count != 0:
                     print()
                     print(board[i][j], '|', end='')
+                    count += 1
                 else:
                     print(board[i][j], '|', end='')
+                    count += 1
 
-     
-
+        print()
+    
 
 
         
     def check_board():                                                                                  #checks to see if a winning combination was found
-        maxSize = board_size * board_size
-        count = 0
-        for combo in winning_combinations:
-            if board[combo[0]] == board[combo[1]] == board[combo[2]] == board[combo[3]] == "X":         #Checks if X's won, returns true
-                global p1Wins
-                p1Wins = int(p1Wins)
-                p1Wins += 1
-                print("Player 1 Wins! Total Wins: ", p1Wins)
-                return True
-            
-            if board[combo[0]] == board[combo[1]] == board[combo[2]] == board[combo[3]] == "O":         #Checks if O's won, returns true
-                global p2Wins
-                p2Wins = int(p2Wins)
-                p2Wins += 1
-                print("Player 2 Wins! Total Wins: ", p2Wins)
-                return True
-            
-        for i in range(0,maxSize):
-            if board[i] == "X" or board[i] == "O":                                                      #checks for a Cats game
-                count += 1
-                
-            if count == maxSize:
-                print("It's a cats game!")
-                return True
+
+        #The following two nested for loops check if there is a winner horizontally
+        horizCount = 0
+        resetCount = 0
+        for i in range(0,board_size):
+            for j in range(0,board_size):
+                if resetCount % board_size != 0:
+                    if board[i][j] == "X":
+                        horizCount += 1
+                        if horizCount == board_size:
+                            print("Player 1 Wins! Total Wins", p1Wins)
+                            return True
+                else:
+                    horizCount = 0
+           
+        horizCount = 0
+        resetCount = 0
+        for i in range(0,board_size):
+            for j in range(0,board_size):
+                if resetCount % board_size != 0:
+                    if board[i][j] == "Y":
+                        horizCount += 1
+                        if horizCount == board_size:
+                            print("Player 2 Wins! Total Wins", p2Wins)
+                            return True
+                else:
+                    horizCount = 0        
+
+        #The following two nested for loops check if there is a winner horizontally
+        horizCount = 0
+        resetCount = 0
+        for j in range(0,board_size):
+            for i in range(0,board_size):
+                if resetCount % board_size != 0:
+                    if board[i][j] == "X":
+                        horizCount += 1
+                        if horizCount == board_size:
+                            print("Player 1 Wins! Total Wins", p1Wins)
+                            return True
+                else:
+                    vertCount = 0
+           
+        vertCount = 0
+        resetCount = 0
+        for j in range(0,board_size):
+            for i in range(0,board_size):
+                if resetCount % board_size != 0:
+                    if board[i][j] == "Y":
+                        vertCount += 1
+                        if horizCount == board_size:
+                            print("Player 2 Wins! Total Wins", p2Wins)
+                            return True
+                else:
+                    vertCount = 0
+
+
+        
+        for i in range(0,board_size):
+            for j in range(0,board_size):
+                if board[i][j] == "X" or board[i][j] == "O":                                                      #checks for a Cats game
+                    count += 1
+                    
+                if count == maxSize:
+                    print("It's a cats game!")
+                    return True
             
 
     def choose_num(playerName):                                                                         #Gets player's move and/or menu options
@@ -121,11 +163,12 @@ def Tic_Tac_Toe():
     def whose_turn():                                                                                   #This function finds whose turn it is if a file is loaded
         xCount = 0
         yCount = 0
-        for i in range(16):
-            if board[i] == "X": 
-                xCount += 1
-            if board[i] == "O":
-                yCount += 1
+        for i in range(0,board_size):
+            for j in range(0,board_size):
+                if board[i][j] == "X": 
+                    xCount += 1
+                if board[i][j] == "O":
+                    yCount += 1
 
         if xCount == yCount:
             return True
@@ -135,6 +178,7 @@ def Tic_Tac_Toe():
     def get_player1(p1):                                                                                #Calls choose_num and then actually makes the move for player1
         move = choose_num(p1)
         if(move != "r" and move != "s"):
+            
             if board[move] == "X" or board[move] == "O":
                 print("\nChosen spot is occupied. Please try again.")
                 get_player1(p1)
@@ -222,6 +266,7 @@ def Tic_Tac_Toe():
             
         else:
             board_size = get_board_size()
+            board = [[0 for x in range(board_size)] for y in range(board_size)]                    #Game board spaces
             create_board(board_size)
             print_board()
             
